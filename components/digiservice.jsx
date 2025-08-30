@@ -14,6 +14,20 @@ import {
 } from "lucide-react";
 
 import { MorphingText } from "./magicui/morphing-text";
+import { motion } from "framer-motion";
+
+// Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.15 },
+  },
+};
 
 const services = [
   {
@@ -62,18 +76,42 @@ export default function DigiService() {
   return (
     <section className="w-full bg-[#0B0F19] text-white px-6 md:px-16 py-24">
       <div className="max-w-7xl mx-auto text-left mb-12">
-        <MorphingText texts={["services"]} className="uppercase"/>
-        <p className="mt-4 text-gray-400 max-w-full flex
-        justify-center">
+        {/* Title animation */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeInUp}
+        >
+          <MorphingText texts={["services"]} className="uppercase" />
+        </motion.div>
+
+        {/* Subtext animation */}
+        <motion.p
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeInUp}
+          className="mt-4 text-gray-400 max-w-full flex justify-center"
+        >
           Integrated services to capture, convert, and compound growth.
-        </p>
+        </motion.p>
       </div>
 
       {/* Service Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+      >
         {services.map((item, index) => (
-          <div
+          <motion.div
             key={index}
+            variants={fadeInUp}
+            whileHover={{ scale: 1.03 }}
+            transition={{ type: "spring", stiffness: 200, damping: 12 }}
             className="flex flex-col justify-between bg-[#0D1620] border border-white/10 rounded-2xl p-6 hover:bg-white/5 transition"
           >
             <div className="flex flex-col gap-4">
@@ -84,9 +122,9 @@ export default function DigiService() {
             <button className="mt-4 text-sm font-medium text-sky-400 hover:underline flex items-center gap-1">
               Learn More →
             </button>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

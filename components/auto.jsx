@@ -4,6 +4,7 @@
 import { OrbitingCircles } from "@/components/magicui/orbiting-circles";
 import React from "react";
 import { Flame, Calendar } from "lucide-react";
+import { motion } from "framer-motion";
 
 // React Icons (AI Logos)
 import { 
@@ -15,24 +16,52 @@ import {
   SiPython 
 } from "react-icons/si";
 
+// Animation Variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+const container = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.2 },
+  },
+};
+
 export default function Auto() {
   return (
     <section className="bg-gradient-to-b from-[#0B1D24] via-[#17313B] to-[#0B1D24] px-6 md:px-16 py-32 relative overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
         
         {/* Left Side */}
-        <div className="space-y-8">
-          <h2 className="text-3xl md:text-5xl font-bold text-white leading-snug">
+        <motion.div
+          className="space-y-8"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={container}
+        >
+          <motion.h2
+            variants={fadeInUp}
+            className="text-3xl md:text-5xl font-bold text-white leading-snug"
+          >
             We Help Businesses <br />
             Unlock the Full Potential <br />
             of <span className="text-sky-400">AI & Automation.</span>
-          </h2>
+          </motion.h2>
 
-          <p className="text-gray-300 text-lg max-w-lg">
+          <motion.p
+            variants={fadeInUp}
+            className="text-gray-300 text-lg max-w-lg"
+          >
             from startups to global enterprises—can adopt AI confidently and strategically with Cosmic Information.
-          </p>
+          </motion.p>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <motion.div
+            variants={fadeInUp}
+            className="flex flex-col sm:flex-row gap-4"
+          >
             <button className="flex items-center gap-2 bg-sky-500 text-white font-medium px-6 py-3 rounded-xl hover:bg-sky-400 transition shadow-lg">
               <Flame className="w-5 h-5" />
               Schedule Free AI Readiness Call
@@ -41,11 +70,17 @@ export default function Auto() {
               <Calendar className="w-5 h-5" />
               Explore AI Solutions
             </button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Right Side - Orbiting AI Icons */}
-        <div className="relative h-[500px] w-full flex items-center justify-center">
+        <motion.div
+          className="relative h-[500px] w-full flex items-center justify-center"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.3 }}
+        >
           {/* Inner Orbit */}
           <OrbitingCircles>
             <SiOpenai className="w-28 h-28 text-white" />
@@ -59,7 +94,7 @@ export default function Auto() {
             <SiProbot className="w-20 h-20 text-green-400" />
             <SiPython className="w-20 h-20 text-yellow-400" />
           </OrbitingCircles>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

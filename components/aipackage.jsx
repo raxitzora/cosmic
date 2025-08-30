@@ -1,9 +1,9 @@
-// /components/AiPackages.jsx
 "use client";
 
 import React from "react";
 import { CheckCircle, Rocket, Globe, BarChart3, BookOpen, Building, Handshake, Trophy } from "lucide-react";
 import { MorphingText } from "./magicui/morphing-text";
+import { motion } from "framer-motion";
 
 const packages = [
   {
@@ -76,6 +76,15 @@ const whyChoose = [
   },
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: (i = 1) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.2, duration: 0.6, ease: "easeOut" },
+  }),
+};
+
 export default function AiPackages() {
   return (
     <section className="bg-[#0B1D24] px-6 md:px-16 py-20 relative overflow-hidden">
@@ -93,9 +102,14 @@ export default function AiPackages() {
       {/* Package Boxes */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {packages.map((pkg, index) => (
-          <div
+          <motion.div
             key={index}
             className="group relative bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-500 ease-[cubic-bezier(.4,0,.2,1)]"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            custom={index}
+            variants={fadeUp}
           >
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-sky-800 via-indigo-700 to-purple-700 opacity-20 group-hover:opacity-50 blur-md transition duration-700 ease-in-out"></div>
             <div className="relative z-10">
@@ -114,7 +128,7 @@ export default function AiPackages() {
               </ul>
               <p className="text-gray-200 mt-6 text-sm italic">{pkg.outcome}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
@@ -131,9 +145,14 @@ export default function AiPackages() {
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {whyChoose.map((item, index) => (
-          <div
+          <motion.div
             key={index}
             className="group relative bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-500"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            custom={index}
+            variants={fadeUp}
           >
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-800 to-sky-700 opacity-20 blur-md group-hover:opacity-40 transition"></div>
             <div className="relative z-10">
@@ -143,7 +162,7 @@ export default function AiPackages() {
               <h3 className="text-lg font-semibold text-white">{item.title}</h3>
               <p className="text-gray-300 text-sm mt-2">{item.desc}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

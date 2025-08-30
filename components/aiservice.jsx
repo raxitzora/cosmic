@@ -12,9 +12,9 @@ import {
   Building,
   BarChart3,
   Brain,
-  Settings,
 } from "lucide-react";
 import { MorphingText } from "./magicui/morphing-text";
+import { motion } from "framer-motion";
 
 const smallBizServices = [
   {
@@ -77,24 +77,48 @@ const enterpriseServices = [
   },
 ];
 
+// Animation Variants
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.15, duration: 0.6, ease: "easeOut" },
+  }),
+};
+
 export default function AiService() {
   return (
     <section className="bg-[#0B1D24] px-6 md:px-16 py-20 relative overflow-hidden">
       {/* Small Business Services */}
-      <div className="text-center mb-16">
+      <motion.div
+        className="text-center mb-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
         <MorphingText
           texts={["Services for", "Small Businesses"]}
           className="uppercase text-4xl md:text-5xl font-extrabold text-white tracking-tight"
         />
-        <p className="text-gray-200 mt-4 text-lg max-w-2xl mx-auto font-bold">
+        <motion.p
+          custom={1}
+          variants={fadeUp}
+          className="text-gray-200 mt-4 text-lg max-w-2xl mx-auto font-bold"
+        >
           Unlock the full potential of AI & automation for small businesses.
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {smallBizServices.map((service, index) => (
-          <div
-            key={index}
+        {smallBizServices.map((service, i) => (
+          <motion.div
+            key={i}
+            custom={i}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeUp}
             className="group relative bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-500 ease-[cubic-bezier(.4,0,.2,1)]"
           >
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-sky-800 opacity-30 blur-md transition duration-700 ease-in-out"></div>
@@ -107,28 +131,51 @@ export default function AiService() {
                 {service.desc}
               </p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
-      <p className="text-gray-200 mt-10 text-center max-w-5xl mx-auto">
+      <motion.p
+        className="text-gray-200 mt-10 text-center max-w-5xl mx-auto"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeUp}
+      >
         We guide clients in leveraging Generative AI, Agentic AI, and intelligent
         automation to streamline operations, improve decision-making, enhance customer
         experiences, and unlock new opportunities for growth.
-      </p>
+      </motion.p>
 
       {/* Enterprise Services Section */}
-      <div className="text-center mt-24 mb-16">
-        <MorphingText texts={["services for", "enterprises"]} className="uppercase text-4xl md:text-5xl font-extrabold text-white tracking-tight" />
-        <p className="text-gray-200 mt-4 text-lg max-w-3xl mx-auto font-bold">
+      <motion.div
+        className="text-center mt-24 mb-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <MorphingText
+          texts={["services for", "enterprises"]}
+          className="uppercase text-4xl md:text-5xl font-extrabold text-white tracking-tight"
+        />
+        <motion.p
+          custom={1}
+          variants={fadeUp}
+          className="text-gray-200 mt-4 text-lg max-w-3xl mx-auto font-bold"
+        >
           Enterprise-grade AI & automation frameworks designed for scale and compliance.
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
 
       <div className="max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-        {enterpriseServices.map((service, index) => (
-          <div
-            key={index}
+        {enterpriseServices.map((service, i) => (
+          <motion.div
+            key={i}
+            custom={i}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeUp}
             className="group relative bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-500 ease-[cubic-bezier(.4,0,.2,1)]"
           >
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-800 opacity-30 blur-md transition duration-700 ease-in-out"></div>
@@ -141,10 +188,21 @@ export default function AiService() {
                 {service.desc}
               </p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-      <p className="text-gray-200 mt-8 text-lg max-w-8xl mx-auto">Our approach blends strategic advisory, implementation, and ongoing optimization to ensure clients remain competitive in an AI-driven future. With a focus on measurable outcomes, we transform AI adoption into sustainable business value.</p>
+
+      <motion.p
+        className="text-gray-200 mt-8 text-lg max-w-8xl mx-auto text-center"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeUp}
+      >
+        Our approach blends strategic advisory, implementation, and ongoing optimization
+        to ensure clients remain competitive in an AI-driven future. With a focus on
+        measurable outcomes, we transform AI adoption into sustainable business value.
+      </motion.p>
     </section>
   );
 }

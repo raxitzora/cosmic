@@ -5,6 +5,16 @@ import { Rocket } from "lucide-react";
 import Link from "next/link";
 import Services from "@/components/Services";
 import About from "@/components/about";
+import { motion } from "framer-motion";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i = 1) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.2, duration: 0.6, ease: "easeOut" },
+  }),
+};
 
 export default function HomePage() {
   return (
@@ -12,20 +22,38 @@ export default function HomePage() {
       {/* Hero Section */}
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-12 py-29 px-6 md:px-12">
         {/* Left Section - Text & Buttons */}
-        <section className="space-y-6 text-center md:text-left uppercase sm:text-center lg:text-left">
-          <h1 className="md:text-6xl font-extrabold text-white leading-tight sm:text-xl">
+        <motion.section
+          className="space-y-6 text-center md:text-left uppercase sm:text-center lg:text-left"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+        >
+          <motion.h1
+            className="md:text-6xl font-extrabold text-white leading-tight sm:text-xl"
+            custom={0}
+            variants={fadeUp}
+          >
             Where Digital <br />
-            Transformation <br /> Meets{" "}
-            <strong className="text-blue-400">Real Business </strong>{" "}
+            Transformation <br />
+            Meets{" "}
+            <strong className="text-blue-400">Real Business </strong>
             <strong className="text-purple-500">Impact</strong>
-          </h1>
+          </motion.h1>
 
-          <p className="text-gray-400 text-lg max-w-xl mx-auto md:mx-0">
+          <motion.p
+            className="text-gray-400 text-lg max-w-xl mx-auto md:mx-0"
+            custom={1}
+            variants={fadeUp}
+          >
             Empowering businesses with innovative technology solutions and
             strategic guidance.
-          </p>
+          </motion.p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4"
+            custom={2}
+            variants={fadeUp}
+          >
             <Link
               href="/contact"
               className="inline-flex items-center gap-2 bg-teal-400 text-black px-6 py-3 rounded-lg font-medium shadow-md hover:bg-teal-300 transition-colors"
@@ -38,13 +66,19 @@ export default function HomePage() {
             >
               Learn More
             </Link>
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
         {/* Right Section - Globe */}
-        <section className="flex justify-center md:justify-end items-center w-full h-full">
+        <motion.section
+          className="flex justify-center md:justify-end items-center w-full h-full"
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.3 }}
+        >
           <Globe />
-        </section>
+        </motion.section>
       </div>
 
       {/* About Section */}
