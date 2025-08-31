@@ -60,12 +60,7 @@ export default function HomePage() {
             >
               <Rocket size={18} /> Partner with Us
             </Link>
-            <Link
-              href="/about"
-              className="inline-flex items-center gap-2 bg-purple-900 text-white px-6 py-3 rounded-lg font-medium shadow-md hover:bg-purple-800 transition-colors"
-            >
-              Learn More
-            </Link>
+           
           </motion.div>
         </motion.section>
 

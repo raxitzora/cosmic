@@ -2,6 +2,7 @@ import React from "react";
 import { Monitor, Brain, LineChart, Globe, Shield } from "lucide-react";
 import { FaFacebookF } from "react-icons/fa";
 import { motion } from "framer-motion"; // ✅ Import Framer Motion
+import Link from "next/link";
 
 function Services() {
   const services = [
@@ -101,12 +102,14 @@ function Services() {
           viewport={{ once: true }}
           className="mt-12"
         >
+          <Link href="/contact">
           <button
             className="px-8 py-3 bg-yellow-400 text-[#0F5881] font-bold text-lg rounded-full shadow-lg
                        transition-all duration-300 transform hover:scale-105 hover:bg-yellow-300 hover:shadow-2xl"
           >
             Book Your Free 30 Minutes Strategy Session
           </button>
+          </Link>
         </motion.div>
       </div>
     </section>

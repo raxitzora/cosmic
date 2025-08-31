@@ -5,6 +5,7 @@ import React from "react";
 import { Phone } from "lucide-react";
 import Chart from "./chart";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 // Variants for animation
 const fadeInUp = {
@@ -51,10 +52,12 @@ export default function Digital() {
 
           {/* CTA Button */}
           <motion.div variants={fadeInUp} className="mt-6">
+            <Link href="/contact">
             <button className="flex items-center gap-2 bg-sky-400 text-black font-medium px-6 py-3 rounded-xl hover:bg-sky-300 transition">
               <Phone className="w-5 h-5" />
               Book a Free 30-Minute Strategy Call
             </button>
+            </Link>
           </motion.div>
         </motion.div>
 

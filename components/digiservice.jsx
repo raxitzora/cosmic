@@ -119,9 +119,7 @@ export default function DigiService() {
               <h3 className="text-xl font-bold">{item.title}</h3>
               <p className="text-gray-200 text-sm">{item.desc}</p>
             </div>
-            <button className="mt-4 text-sm font-medium text-sky-400 hover:underline flex items-center gap-1">
-              Learn More →
-            </button>
+           
           </motion.div>
         ))}
       </motion.div>

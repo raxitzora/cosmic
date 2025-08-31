@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Sparkles, Bot, Link2, Calendar } from "lucide-react";
 import { MorphingText } from "./magicui/morphing-text";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 // Variants
 const fadeInUp = {
@@ -149,10 +150,12 @@ export default function Lastdg() {
           viewport={{ once: true, amount: 0.3 }}
           className="mt-6"
         >
+          <Link href="contact">
           <button className="flex items-center gap-2 bg-white text-black font-medium px-6 py-3 rounded-xl hover:bg-gray-100 transition mx-auto">
             <Calendar className="w-5 h-5" />
             Schedule Your Free 30-Min Discovery Call
           </button>
+          </Link>
         </motion.div>
       </div>
     </section>

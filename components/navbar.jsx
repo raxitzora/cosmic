@@ -14,7 +14,6 @@ export default function Navbar() {
     { name: "AI", href: "/ai" },
     { name: "Transformation", href: "/transformation" },
     { name: "SAP Service", href: "/sapservice" },
-    { name: "Managed Business Service", href: "/managedbusiness" },
   ];
 
   // Scroll effect
@@ -34,7 +33,7 @@ export default function Navbar() {
     >
       <div className="mx-auto flex items-center justify-between px-6 lg:px-12 h-20">
         {/* Logo + Company Name */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <Image
             src="/logo.png"
             alt="Cosmic Logo"
@@ -42,13 +41,13 @@ export default function Navbar() {
             height={90}
             className="rounded-lg"
           />
-          <span className="text-white font-semibold text-lg leading-tight">
+          <span className="text-white font-bold text-lg leading-tight">
             Cosmic Information <br /> System, LLC
           </span>
         </div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-10 text-white font-medium">
+        <div className="hidden md:flex items-center gap-10 text-white text-xl">
           {navItems.map((item, index) => (
             <Link
               key={index}

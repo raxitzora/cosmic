@@ -7,7 +7,7 @@ import { MorphingText } from "./magicui/morphing-text";
 export default function TransformCards() {
   const { scrollYProgress } = useScroll();
 
-  const opacity = useTransform(scrollYProgress, [0.1, 0.85, 1], [0, 0.5, 1]);
+  const opacity = useTransform(scrollYProgress, [1, 0.85, 1], [0, 0.5, 1]);
   const translateY = useTransform(scrollYProgress, [0.7, 1], [50, 0]);
   const zIndex = useTransform(scrollYProgress, [0.7, 0.85, 1], [0, 0, 50]);
 
@@ -34,8 +34,8 @@ export default function TransformCards() {
         "Project & Program Management for Transformation Initiatives",
         "Continuous Improvement & Application Managed Services (AMS)",
       ],
-      outcome: null,
-      icon: "🔹",
+      outcome: "Successful implementation, measurable ROI, and continuous digital growth",
+      icon: "💡",
     },
   ];
 
@@ -96,41 +96,51 @@ export default function TransformCards() {
       <div className="py-24 w-full flex flex-col items-center">
         <MorphingText texts={["services"]} className="uppercase text-center mb-12" />
 
-        <motion.div
-          style={{ opacity, y: translateY, zIndex }}
-          className="flex flex-col md:flex-row gap-8 justify-center items-center w-full max-w-7xl"
-        >
-          {serviceCards.map((card, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-              className="bg-gradient-to-br from-gray-800 via-gray-900 to-gray-600 p-6 sm:p-8 rounded-3xl shadow-2xl flex flex-col justify-between w-full sm:w-[28rem] md:w-[32rem] lg:w-[36rem] xl:w-[40rem] min-h-[450px]"
-            >
-              <div>
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-white">
-                  {card.title}
-                </h3>
-                <ul className="list-disc list-inside space-y-2 text-white text-sm sm:text-base md:text-base">
-                  {card.items.map((item, idx) => (
-                    <li key={idx}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-              {card.outcome && (
-                <p className="mt-4 text-gray-400 text-sm sm:text-base flex items-start gap-2">
-                  <span>{card.icon}</span>
-                  {card.outcome}
-                </p>
-              )}
-            </motion.div>
+       <motion.div
+  style={{ opacity, y: translateY, zIndex }}
+  className="flex flex-col md:flex-row gap-8 justify-center items-center w-full max-w-7xl"
+>
+  {serviceCards.map((card, index) => (
+    <motion.div
+      key={index}
+      whileHover={{
+        scale: 1.05,
+        y: -5,
+        boxShadow: "0 25px 50px rgba(255, 255, 255, 0.15)"
+      }}
+      transition={{ type: "spring", stiffness: 300 }}
+      className="relative flex flex-col justify-between w-full sm:w-[28rem] md:w-[32rem] lg:w-[36rem] xl:w-[40rem] min-h-[480px]
+                 p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl hover:shadow-3xl"
+    >
+      {/* Accent Top Border */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 via-red-400 to-pink-500 rounded-t-3xl" />
+
+      <div className="relative z-10">
+        <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-6 text-white">
+          {card.title}
+        </h3>
+        <ul className="list-disc list-inside space-y-2 text-white text-base sm:text-lg">
+          {card.items.map((item, idx) => (
+            <li key={idx}>{item}</li>
           ))}
-        </motion.div>
+        </ul>
+      </div>
+
+      {card.outcome && (
+        <p className="mt-6 text-gray-200 text-base sm:text-lg flex items-start gap-2">
+          <span>{card.icon}</span>
+          {card.outcome}
+        </p>
+      )}
+    </motion.div>
+  ))}
+</motion.div>
+
       </div>
 
       {/* Industries Section */}
       <div className="py-24 w-full flex flex-col items-center">
-        <MorphingText texts={["industries we serve",]} className="uppercase text-center mb-12" />
+        <MorphingText texts={["industry",]} className="uppercase text-center mb-12" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl w-full mx-auto">
           {industries.map((industry, index) => (

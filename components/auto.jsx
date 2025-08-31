@@ -15,6 +15,7 @@ import {
   SiProbot, 
   SiPython 
 } from "react-icons/si";
+import Link from "next/link";
 
 // Animation Variants
 const fadeInUp = {
@@ -62,14 +63,13 @@ export default function Auto() {
             variants={fadeInUp}
             className="flex flex-col sm:flex-row gap-4"
           >
+            <Link href="/contact">
             <button className="flex items-center gap-2 bg-sky-500 text-white font-medium px-6 py-3 rounded-xl hover:bg-sky-400 transition shadow-lg">
               <Flame className="w-5 h-5" />
               Schedule Free AI Readiness Call
             </button>
-            <button className="flex items-center gap-2 border border-sky-400 text-sky-400 font-medium px-6 py-3 rounded-xl hover:bg-sky-400/10 transition">
-              <Calendar className="w-5 h-5" />
-              Explore AI Solutions
-            </button>
+            </Link>
+           
           </motion.div>
         </motion.div>
 

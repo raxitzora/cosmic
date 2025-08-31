@@ -133,10 +133,10 @@ function SAP() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="bg-gradient-to-br from-[#6B7280] via-[#9CA3AF] to-[#D1D5DB] rounded-xl p-6 shadow-lg"
+              className="bg-white/5 border border-white/10 rounded-xl p-6 shadow-lg"
             >
               <div className="text-3xl mb-2">{item.icon}</div>
-              <h2 className="text-xl md:text-2xl font-bold mb-2">{item.title}</h2>
+              <h2 className="text-xl md:text-2xl font-bold mb-2 text-white">{item.title}</h2>
               <p className="text-white">{item.desc}</p>
             </motion.div>
           ))}
