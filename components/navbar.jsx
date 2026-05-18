@@ -100,7 +100,9 @@ export default function Navbar() {
           px-6 lg:px-12
         "
       >
-        {/* Logo */}
+        
+        
+                {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-3"
