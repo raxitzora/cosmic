@@ -1,149 +1,464 @@
+// /components/SAP.jsx
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
-import { MorphingText } from "./magicui/morphing-text";
+import React, { memo } from "react";
+import dynamic from "next/dynamic";
+
+// Lazy load framer-motion
+const MotionDiv = dynamic(
+  async () => {
+    const mod = await import("framer-motion");
+    return mod.motion.div;
+  },
+  {
+    ssr: false,
+  }
+);
+
+const MotionH1 = dynamic(
+  async () => {
+    const mod = await import("framer-motion");
+    return mod.motion.h1;
+  },
+  {
+    ssr: false,
+  }
+);
+
+const MotionP = dynamic(
+  async () => {
+    const mod = await import("framer-motion");
+    return mod.motion.p;
+  },
+  {
+    ssr: false,
+  }
+);
+
+// Lazy load MorphingText
+const MorphingText = dynamic(
+  () =>
+    import("./magicui/morphing-text").then(
+      (mod) => mod.MorphingText
+    ),
+  {
+    ssr: false,
+  }
+);
+
+// Why Us Data
+const whyUsData = [
+  {
+    icon: "🌍",
+
+    title:
+      "25+ Years of SAP Experience",
+
+    desc:
+      "Our senior consultants bring over 25 years of SAP expertise across complex global transformation programs.",
+  },
+
+  {
+    icon: "📚",
+
+    title:
+      "Industry Thought Leadership",
+
+    desc:
+      "Published expertise in Digital Transformation & SAP S/4HANA with trusted strategic insights.",
+  },
+
+  {
+    icon: "🤝",
+
+    title:
+      "Global Consulting Experience",
+
+    desc:
+      "Transformation support for 50+ global clients across North America, Europe, and Asia.",
+  },
+
+  {
+    icon: "🏢",
+
+    title:
+      "Big 4 Consulting Pedigree",
+
+    desc:
+      "Consulting experience from IBM, Accenture, and Capgemini methodologies and delivery standards.",
+  },
+
+  {
+    icon: "🚀",
+
+    title:
+      "End-to-End Transformation Partner",
+
+    desc:
+      "From strategy and implementation to managed services and continuous optimization.",
+  },
+
+  {
+    icon: "💡",
+
+    title:
+      "Partner Commitment",
+
+    desc:
+      "A long-term partnership mindset focused on measurable business outcomes and SAP success.",
+  },
+];
+
+// Services Data
+const services = [
+  {
+    title:
+      "Advisory & Strategy Services",
+
+    subtitle:
+      "(Plan, Prepare & Guide Your SAP Journey)",
+
+    gradient:
+      "bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#3B82F6]",
+
+    items: [
+      "SAP S/4HANA Readiness Assessment & Roadmap",
+      "SAP S/4HANA Project & Program Management",
+      "Business Process Optimization & Rationalization",
+      "SAP BTP Strategy & Integration Advisory",
+      "Change Management & User Adoption Strategy",
+    ],
+
+    outcome:
+      "Clarity, structure, and alignment before execution.",
+  },
+
+  {
+    title:
+      "Implementation & Managed Services",
+
+    subtitle:
+      "(Deliver, Integrate & Support Your SAP Landscape)",
+
+    gradient:
+      "bg-gradient-to-br from-[#059669] via-[#10B981] to-[#34D399]",
+
+    items: [
+      "SAP S/4HANA Implementation",
+      "SAP S/4HANA Migration & Conversion",
+      "Custom Extensions & SAP BTP Development",
+      "SAP Testing & Quality Assurance",
+      "Application Managed Services (AMS)",
+    ],
+
+    outcome:
+      "Successful implementation, seamless migration, and continuous optimization.",
+  },
+];
+
+// Animation Variants
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+
+  visible: {
+    opacity: 1,
+    y: 0,
+
+    transition: {
+      duration: 0.45,
+      ease: "easeOut",
+    },
+  },
+};
+
+const containerVariants = {
+  hidden: {},
+
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+// Optimized Service Card
+const ServiceCard = memo(function ServiceCard({
+  title,
+  subtitle,
+  gradient,
+  items,
+  outcome,
+}) {
+  return (
+    <MotionDiv
+      variants={fadeUp}
+      className={`
+        relative mt-20
+        flex-1 rounded-xl
+        p-6 shadow-lg
+        ${gradient}
+      `}
+    >
+      {/* Title */}
+      <h2
+        className="
+          mb-2 text-xl
+          font-bold text-white
+          md:text-2xl
+        "
+      >
+        {title}
+      </h2>
+
+      {/* Subtitle */}
+      <p
+        className="
+          mb-4 italic
+          text-white
+        "
+      >
+        {subtitle}
+      </p>
+
+      {/* List */}
+      <ul
+        className="
+          mb-4 list-inside
+          list-disc space-y-1
+          text-white
+        "
+      >
+        {items.map((item) => (
+          <li key={item}>
+            {item}
+          </li>
+        ))}
+      </ul>
+
+      {/* Outcome */}
+      <p
+        className="
+          font-semibold
+          text-white
+        "
+      >
+        💡 Outcome: {outcome}
+      </p>
+    </MotionDiv>
+  );
+});
+
+// Optimized Why Us Card
+const WhyUsCard = memo(function WhyUsCard({
+  icon,
+  title,
+  desc,
+}) {
+  return (
+    <MotionDiv
+      variants={fadeUp}
+      className="
+        rounded-xl border
+        border-white/10
+        bg-white/5
+        p-6 shadow-lg
+      "
+    >
+      {/* Icon */}
+      <div className="mb-2 text-3xl">
+        {icon}
+      </div>
+
+      {/* Title */}
+      <h2
+        className="
+          mb-2 text-xl
+          font-bold text-white
+          md:text-2xl
+        "
+      >
+        {title}
+      </h2>
+
+      {/* Description */}
+      <p className="text-white">
+        {desc}
+      </p>
+    </MotionDiv>
+  );
+});
 
 function SAP() {
-  const whyUsData = [
-    {
-      icon: "🌍",
-      title: "25+ Years of SAP Experience",
-      desc: "Our senior consultants bring over 25 years of SAP expertise, having successfully delivered large and complex global projects across industries."
-    },
-    {
-      icon: "📚",
-      title: "Industry Thought Leadership",
-      desc: "Our team includes a published author on Digital Transformation & SAP S/4HANA, reflecting deep knowledge and forward-thinking perspectives trusted by clients worldwide."
-    },
-    {
-      icon: "🤝",
-      title: "Global Consulting Experience",
-      desc: "We have provided SAP consulting services to 50+ global clients, supporting transformations in North America, Europe, and Asia."
-    },
-    {
-      icon: "🏢",
-      title: "Big 4 Consulting Pedigree",
-      desc: "With backgrounds at top firms like IBM, Accenture, and Capgemini, our consultants bring the discipline, methodologies, and global best practices of the world’s most respected consulting companies."
-    },
-    {
-      icon: "🚀",
-      title: "End-to-End Transformation Partner",
-      desc: "From Advisory & Strategy to Implementation & Managed Services, we offer full lifecycle support—ensuring projects are delivered on time, within budget, and aligned with your business goals."
-    },
-    {
-      icon: "💡",
-      title: "Partner Commitment",
-      desc: "With Cosmic, you gain more than a service provider—you gain a partner committed to driving your SAP success."
-    }
-  ];
-
   return (
     <>
-      {/* Hero Section */}
-      <section className="w-full bg-[#0C1F27] bg-opacity-90 text-white py-16 px-6">
-        <div className="w-full text-center mt-20">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6"
+      {/* HERO */}
+      <section
+        className="
+          w-full bg-[#0C1F27]
+          bg-opacity-90
+          px-6 py-16
+          text-white
+        "
+      >
+        <div
+          className="
+            mt-20 w-full
+            text-center
+          "
+        >
+          {/* Heading */}
+          <MotionH1
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            variants={fadeUp}
+            className="
+              mb-6 text-3xl
+              font-extrabold
+              sm:text-4xl
+              md:text-5xl
+            "
           >
             Accelerate Your{" "}
-            <span className="text-yellow-400">SAP & S/4HANA Transformation</span>
-          </motion.h1>
+            <span className="text-yellow-400">
+              SAP & S/4HANA
+              Transformation
+            </span>
+          </MotionH1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            viewport={{ once: true }}
-            className="text-base sm:text-lg md:text-xl text-center max-w-3xl mx-auto mb-16"
+          {/* Description */}
+          <MotionP
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            transition={{
+              delay: 0.15,
+            }}
+            variants={fadeUp}
+            className="
+              mx-auto mb-16
+              max-w-3xl
+              text-base
+              sm:text-lg
+              md:text-xl
+            "
           >
-            Partner with an experienced SAP team to plan, build, and run your SAP
-            BTP landscape. We combine strategy, engineering, and managed services
-            to deliver measurable outcomes.
-          </motion.p>
+            Partner with an experienced SAP
+            team to plan, build, and run
+            your SAP BTP landscape with
+            measurable business outcomes.
+          </MotionP>
         </div>
       </section>
 
-      {/* Services Cards Section */}
-      <section className="w-full bg-black py-16 px-6">
-        <MorphingText texts={["services"]} className="uppercase" />
-        <p className="text-white flex justify-center font-bold mt-4 text-center">
-          From vision to value realization – comprehensive services aligned to your transformation stage.
-        </p>
-        <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto">
-          {/* Card 1 */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="flex-1 p-6 rounded-xl shadow-lg bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] mt-20"
-          >
-            <h2 className="text-xl md:text-2xl font-bold mb-2 text-white">
-              Advisory & Strategy Services
-            </h2>
-            <p className="italic mb-4 text-white">(Plan, Prepare & Guide Your SAP Journey)</p>
-            <ul className="list-disc list-inside space-y-1 mb-4 text-white">
-              <li>SAP S/4HANA Readiness Assessment & Roadmap</li>
-              <li>SAP S/4HANA Project & Program Management</li>
-              <li>Business Process Optimization & Rationalization</li>
-              <li>SAP BTP Strategy & Integration Advisory</li>
-              <li>Change Management & User Adoption Strategy</li>
-            </ul>
-            <p className="font-semibold text-white">
-              💡 Outcome: Clarity, structure, and alignment before execution.
-            </p>
-          </motion.div>
+      {/* SERVICES */}
+      <section
+        className="
+          w-full bg-black
+          px-6 py-16
+        "
+      >
+        {/* Heading */}
+        <div className="text-center">
+          <MorphingText
+            texts={["services"]}
+            className="uppercase"
+          />
 
-          {/* Card 2 */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex-1 p-6 rounded-xl shadow-lg bg-gradient-to-br from-[#059669] via-[#10B981] to-[#34D399] mt-20"
+          <p
+            className="
+              mt-4 flex
+              justify-center
+              text-center font-bold
+              text-white
+            "
           >
-            <h2 className="text-xl md:text-2xl font-bold mb-2 text-white">
-              Implementation & Managed Services
-            </h2>
-            <p className="italic mb-4 text-white">(Deliver, Integrate & Support Your SAP Landscape)</p>
-            <ul className="list-disc list-inside space-y-1 mb-4 text-white">
-              <li>SAP S/4HANA Implementation (Public & Private Cloud)</li>
-              <li>SAP S/4HANA Migration & Conversion (ECC to S/4)</li>
-              <li>Custom Extensions & Application Development on SAP BTP</li>
-              <li>SAP Testing, Automation & Quality Assurance</li>
-              <li>Application Managed Services (AMS) & Continuous Support</li>
-            </ul>
-            <p className="font-semibold text-white">
-              💡 Outcome: A successful implementation, seamless migration, and continuous improvement.
-            </p>
-          </motion.div>
+            From vision to value realization
+            – comprehensive services aligned
+            to your transformation stage.
+          </p>
         </div>
-      </section>
 
-      {/* Why Us Section */}
-      <section className="w-full bg-[#0C1F27] py-16 px-6">
-        <MorphingText texts={["why us?"]} className="text-white text-4xl md:text-5xl flex justify-center font-bold mb-10 uppercase" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {whyUsData.map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="bg-white/5 border border-white/10 rounded-xl p-6 shadow-lg"
-            >
-              <div className="text-3xl mb-2">{item.icon}</div>
-              <h2 className="text-xl md:text-2xl font-bold mb-2 text-white">{item.title}</h2>
-              <p className="text-white">{item.desc}</p>
-            </motion.div>
+        {/* Grid */}
+        <MotionDiv
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: true,
+            amount: 0.1,
+          }}
+          className="
+            mx-auto flex
+            max-w-6xl
+            flex-col gap-8
+            md:flex-row
+          "
+        >
+          {services.map((service) => (
+            <ServiceCard
+              key={service.title}
+              {...service}
+            />
           ))}
+        </MotionDiv>
+      </section>
+
+      {/* WHY US */}
+      <section
+        className="
+          w-full bg-[#0C1F27]
+          px-6 py-16
+        "
+      >
+        {/* Heading */}
+        <div className="text-center">
+          <MorphingText
+            texts={["why us?"]}
+            className="
+              mb-10 flex
+              justify-center
+              text-4xl font-bold
+              uppercase text-white
+              md:text-5xl
+            "
+          />
         </div>
+
+        {/* Grid */}
+        <MotionDiv
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: true,
+            amount: 0.1,
+          }}
+          className="
+            mx-auto grid
+            max-w-6xl
+            grid-cols-1 gap-8
+            md:grid-cols-2
+            lg:grid-cols-3
+          "
+        >
+          {whyUsData.map((item) => (
+            <WhyUsCard
+              key={item.title}
+              {...item}
+            />
+          ))}
+        </MotionDiv>
       </section>
     </>
   );
 }
 
-export default SAP;
+export default memo(SAP);

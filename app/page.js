@@ -1,86 +1,201 @@
 "use client";
-import React from "react";
-import { Globe } from "@/components/magicui/globe";
-import { Rocket } from "lucide-react";
+
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import Services from "@/components/Services";
-import About from "@/components/about";
+import { Rocket } from "lucide-react";
 import { motion } from "framer-motion";
 
+import About from "@/components/about";
+import Services from "@/components/Services";
+
+// Proper Dynamic Import for Named Export
+const Globe = dynamic(
+  async () => {
+    const mod = await import("@/components/magicui/globe");
+    return mod.Globe;
+  },
+  {
+    ssr: false,
+
+    loading: () => (
+      <div
+        className="
+          h-[320px] w-[320px]
+          animate-pulse rounded-full
+          bg-[#16313A]
+          md:h-[450px] md:w-[450px]
+        "
+      />
+    ),
+  }
+);
+
+// Animation Variants
 const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i = 1) => ({
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+
+  visible: (delay = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.2, duration: 0.6, ease: "easeOut" },
+
+    transition: {
+      delay,
+      duration: 0.6,
+      ease: "easeOut",
+    },
   }),
 };
 
 export default function HomePage() {
   return (
-    <main className="w-full bg-gradient-to-b from-[#0B1D24] via-[#17313B] to-[#0B1D24] pt-25">
-      {/* Hero Section */}
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-12 py-29 px-6 md:px-12">
-        {/* Left Section - Text & Buttons */}
-        <motion.section
-          className="space-y-6 text-center md:text-left uppercase sm:text-center lg:text-left"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+    <main
+      className="
+        min-h-screen overflow-hidden
+        bg-gradient-to-b
+        from-[#0B1D24]
+        via-[#17313B]
+        to-[#0B1D24]
+      "
+    >
+      {/* HERO SECTION */}
+      <section className="relative pt-24">
+        <div
+          className="
+            mx-auto grid
+            min-h-screen max-w-7xl
+            grid-cols-1 items-center
+            gap-14
+            px-6 py-16
+            md:grid-cols-2
+            md:px-12
+          "
         >
-          <motion.h1
-            className="md:text-6xl font-extrabold text-white leading-tight sm:text-xl"
-            custom={0}
-            variants={fadeUp}
-          >
-            Where Digital <br />
-            Transformation <br />
-            Meets{" "}
-            <strong className="text-blue-400">Real Business </strong>
-            <strong className="text-purple-500">Impact</strong>
-          </motion.h1>
-
-          <motion.p
-            className="text-gray-400 text-lg max-w-xl mx-auto md:mx-0"
-            custom={1}
-            variants={fadeUp}
-          >
-            Empowering businesses with innovative technology solutions and
-            strategic guidance.
-          </motion.p>
-
+          {/* LEFT CONTENT */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4"
-            custom={2}
-            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            className="
+              flex flex-col
+              items-center
+              space-y-8
+              text-center
+              md:items-start
+              md:text-left
+            "
           >
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 bg-teal-400 text-black px-6 py-3 rounded-lg font-medium shadow-md hover:bg-teal-300 transition-colors"
+            {/* HEADING */}
+            <motion.h1
+              variants={fadeUp}
+              custom={0.1}
+              className="
+                text-4xl font-extrabold
+                leading-tight text-white
+                sm:text-5xl
+                lg:text-6xl
+              "
             >
-              <Rocket size={18} /> Partner with Us
-            </Link>
-           
+              Where Digital
+              <br />
+              Transformation
+              <br />
+              Meets{" "}
+              <span className="text-blue-400">
+                Real Business
+              </span>{" "}
+              <span className="text-purple-500">
+                Impact
+              </span>
+            </motion.h1>
+
+            {/* DESCRIPTION */}
+            <motion.p
+              variants={fadeUp}
+              custom={0.2}
+              className="
+                max-w-xl
+                text-base leading-relaxed
+                text-gray-300
+                sm:text-lg
+              "
+            >
+              Empowering businesses with innovative
+              technology solutions and strategic
+              guidance for scalable digital growth.
+            </motion.p>
+
+            {/* BUTTON */}
+            <motion.div
+              variants={fadeUp}
+              custom={0.3}
+              className="flex flex-wrap gap-4"
+            >
+              <Link
+                href="/contact"
+                prefetch={true}
+                className="
+                  inline-flex items-center
+                  gap-2 rounded-xl
+                  bg-teal-400
+                  px-6 py-3
+                  font-semibold text-black
+                  shadow-lg
+                  transition-all duration-300
+                  hover:scale-105
+                  hover:bg-teal-300
+                  hover:shadow-teal-400/40
+                "
+              >
+                <Rocket size={18} />
+                Partner with Us
+              </Link>
+            </motion.div>
           </motion.div>
-        </motion.section>
 
-        {/* Right Section - Globe */}
-        <motion.section
-          className="flex justify-center md:justify-end items-center w-full h-full"
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          <Globe />
-        </motion.section>
-      </div>
+          {/* RIGHT CONTENT */}
+          <motion.div
+            initial={{
+              opacity: 0,
+              scale: 0.9,
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+            }}
+            transition={{
+              duration: 0.8,
+              ease: "easeOut",
+            }}
+            className="
+              flex min-h-[400px]
+              items-center justify-center
+            "
+          >
+            {/* IMPORTANT WRAPPER */}
+            <div
+              className="
+                relative
+                h-[350px] w-full
+                md:h-[500px]
+              "
+            >
+              <Globe />
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
-      {/* About Section */}
-      <About />
+      {/* ABOUT SECTION */}
+      <section>
+        <About />
+      </section>
 
-      {/* Services Section */}
-      <Services />
+      {/* SERVICES SECTION */}
+      <section>
+        <Services />
+      </section>
     </main>
   );
 }

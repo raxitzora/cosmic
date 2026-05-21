@@ -1,7 +1,8 @@
-// /components/DigiService.jsx
 "use client";
 
-import React from "react";
+import React, { memo } from "react";
+import dynamic from "next/dynamic";
+
 import {
   Search,
   Target,
@@ -13,116 +14,281 @@ import {
   Brain,
 } from "lucide-react";
 
-import { MorphingText } from "./magicui/morphing-text";
-import { motion } from "framer-motion";
+// Lazy Load Framer Motion
+const MotionDiv = dynamic(
+  async () => {
+    const mod = await import("framer-motion");
+    return mod.motion.div;
+  },
+  {
+    ssr: false,
+  }
+);
 
-// Animation variants
+const MotionP = dynamic(
+  async () => {
+    const mod = await import("framer-motion");
+    return mod.motion.p;
+  },
+  {
+    ssr: false,
+  }
+);
+
+// Lazy Load Heavy MorphingText
+const MorphingText = dynamic(
+  () =>
+    import("./magicui/morphing-text").then(
+      (mod) => mod.MorphingText
+    ),
+  {
+    ssr: false,
+  }
+);
+
+// Services Data
+const services = [
+  {
+    icon: Search,
+    color: "text-sky-400",
+    title: "SEO",
+    desc: "Technical SEO, AI-assisted content, and search intent optimization for scalable ranking growth.",
+  },
+
+  {
+    icon: Target,
+    color: "text-pink-400",
+    title: "PPC",
+    desc: "High-performance paid campaigns with AI-driven ad testing and conversion optimization.",
+  },
+
+  {
+    icon: Share2,
+    color: "text-green-400",
+    title: "Social Media",
+    desc: "Platform-native content strategies and AI-powered audience engagement systems.",
+  },
+
+  {
+    icon: PenTool,
+    color: "text-purple-400",
+    title: "Content Creation",
+    desc: "Consistent high-quality content pipelines from blogs to scripts and creative assets.",
+  },
+
+  {
+    icon: Mail,
+    color: "text-yellow-400",
+    title: "Email Marketing",
+    desc: "Automated lifecycle campaigns with intelligent segmentation and personalization.",
+  },
+
+  {
+    icon: BarChart3,
+    color: "text-red-400",
+    title: "CRO",
+    desc: "Conversion-focused experimentation frameworks designed to maximize business outcomes.",
+  },
+
+  {
+    icon: LayoutGrid,
+    color: "text-indigo-400",
+    title: "Website Design",
+    desc: "Fast, modern, SEO-friendly websites engineered for scalability and accessibility.",
+  },
+
+  {
+    icon: Brain,
+    color: "text-orange-400",
+    title: "AI Analytics",
+    desc: "AI-powered funnel insights, automation systems, and predictive growth intelligence.",
+  },
+];
+
+// Animation Variants
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+
+  visible: {
+    opacity: 1,
+    y: 0,
+
+    transition: {
+      duration: 0.45,
+      ease: "easeOut",
+    },
+  },
 };
 
 const containerVariants = {
   hidden: {},
+
   visible: {
-    transition: { staggerChildren: 0.15 },
+    transition: {
+      staggerChildren: 0.1,
+    },
   },
 };
 
-const services = [
-  {
-    icon: <Search className="w-10 h-10 text-sky-400" />,
-    title: "SEO",
-    desc: "Technical, on-page, and AI-written content tuned for intent.",
-  },
-  {
-    icon: <Target className="w-10 h-10 text-pink-400" />,
-    title: "PPC",
-    desc: "High-ROAS campaigns with generative ad variations.",
-  },
-  {
-    icon: <Share2 className="w-10 h-10 text-green-400" />,
-    title: "Social Media",
-    desc: "Platform-native content and growth loops powered by AI.",
-  },
-  {
-    icon: <PenTool className="w-10 h-10 text-purple-400" />,
-    title: "Content Creation",
-    desc: "From video scripts to blog engines with consistent tone.",
-  },
-  {
-    icon: <Mail className="w-10 h-10 text-yellow-400" />,
-    title: "Email Marketing",
-    desc: "Lifecycle flows and campaigns with predictive targeting.",
-  },
-  {
-    icon: <BarChart3 className="w-10 h-10 text-red-400" />,
-    title: "CRO",
-    desc: "Experimentation frameworks to lift conversion at scale.",
-  },
-  {
-    icon: <LayoutGrid className="w-10 h-10 text-indigo-400" />,
-    title: "Website Design",
-    desc: "Modern, fast, accessible sites that perform on search.",
-  },
-  {
-    icon: <Brain className="w-10 h-10 text-orange-400" />,
-    title: "AI Analytics",
-    desc: "Agentic insights and automation across your funnel.",
-  },
-];
-
-export default function DigiService() {
+// Optimized Service Card
+const ServiceCard = memo(function ServiceCard({
+  icon: Icon,
+  color,
+  title,
+  desc,
+}) {
   return (
-    <section className="w-full bg-[#0B0F19] text-white px-6 md:px-16 py-24">
-      <div className="max-w-7xl mx-auto text-left mb-12">
-        {/* Title animation */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
+    <MotionDiv
+      variants={fadeInUp}
+      className="
+        group flex flex-col
+        justify-between
+        rounded-3xl
+        border border-white/10
+        bg-[#0D1620]
+        p-7
+        transition-all duration-300
+        hover:-translate-y-1
+        hover:border-white/20
+        hover:bg-white/[0.04]
+      "
+    >
+      <div className="flex flex-col gap-5">
+        {/* ICON */}
+        <div
+          className="
+            flex h-16 w-16
+            items-center justify-center
+            rounded-2xl
+            bg-white/5
+            transition-all duration-300
+            group-hover:bg-white/10
+          "
         >
-          <MorphingText texts={["services"]} className="uppercase" />
-        </motion.div>
+          <Icon
+            className={`
+              h-8 w-8
+              transition-transform duration-300
+              group-hover:scale-110
+              ${color}
+            `}
+          />
+        </div>
 
-        {/* Subtext animation */}
-        <motion.p
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
-          className="mt-4 text-gray-400 max-w-full flex justify-center"
+        {/* TITLE */}
+        <h3
+          className="
+            text-2xl font-bold
+            text-white
+          "
         >
-          Integrated services to capture, convert, and compound growth.
-        </motion.p>
+          {title}
+        </h3>
+
+        {/* DESCRIPTION */}
+        <p
+          className="
+            text-sm leading-relaxed
+            text-gray-300
+            md:text-base
+          "
+        >
+          {desc}
+        </p>
       </div>
+    </MotionDiv>
+  );
+});
 
-      {/* Service Cards */}
-      <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-      >
-        {services.map((item, index) => (
-          <motion.div
-            key={index}
+function DigiService() {
+  return (
+    <section
+      className="
+        relative overflow-hidden
+        bg-[#0B0F19]
+        px-6 py-24
+        text-white
+        md:px-16
+      "
+    >
+      <div className="mx-auto max-w-7xl">
+        {/* HEADER */}
+        <div className="mb-16">
+          {/* TITLE */}
+          <MotionDiv
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
             variants={fadeInUp}
-            whileHover={{ scale: 1.03 }}
-            transition={{ type: "spring", stiffness: 200, damping: 12 }}
-            className="flex flex-col justify-between bg-[#0D1620] border border-white/10 rounded-2xl p-6 hover:bg-white/5 transition"
           >
-            <div className="flex flex-col gap-4">
-              <div className="p-3 rounded-lg bg-white/10 w-fit">{item.icon}</div>
-              <h3 className="text-xl font-bold">{item.title}</h3>
-              <p className="text-gray-200 text-sm">{item.desc}</p>
+            <div
+              className="
+                text-5xl font-extrabold
+                uppercase tracking-wide
+                md:text-7xl
+              "
+            >
+              <MorphingText
+                texts={["Services"]}
+              />
             </div>
-           
-          </motion.div>
-        ))}
-      </motion.div>
+          </MotionDiv>
+
+          {/* SUBTEXT */}
+          <MotionP
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+            variants={fadeInUp}
+            className="
+              mt-6 max-w-3xl
+              text-lg leading-relaxed
+              text-gray-400
+              md:text-xl
+            "
+          >
+            Integrated digital systems
+            designed to capture attention,
+            convert traffic, and scale
+            predictable business growth.
+          </MotionP>
+        </div>
+
+        {/* GRID */}
+        <MotionDiv
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: true,
+            amount: 0.1,
+          }}
+          className="
+            grid grid-cols-1
+            gap-8
+            md:grid-cols-2
+            xl:grid-cols-4
+          "
+        >
+          {services.map((service) => (
+            <ServiceCard
+              key={service.title}
+              {...service}
+            />
+          ))}
+        </MotionDiv>
+      </div>
     </section>
   );
 }
+
+export default memo(DigiService);

@@ -1,95 +1,261 @@
-// /components/WhyChoose.jsx
 "use client";
 
-import React from "react";
-import { Sparkles, TrendingUp, Layers, Cog } from "lucide-react";
-import { MorphingText } from "./magicui/morphing-text";
-import { motion } from "framer-motion";
+import React, { memo } from "react";
+import dynamic from "next/dynamic";
 
-// Animation variants
+import {
+  Sparkles,
+  TrendingUp,
+  Layers,
+  Cog,
+} from "lucide-react";
+
+// Lazy Load Framer Motion
+const MotionDiv = dynamic(
+  async () => {
+    const mod = await import("framer-motion");
+    return mod.motion.div;
+  },
+  {
+    ssr: false,
+  }
+);
+
+const MotionP = dynamic(
+  async () => {
+    const mod = await import("framer-motion");
+    return mod.motion.p;
+  },
+  {
+    ssr: false,
+  }
+);
+
+// Lazy Load Heavy MorphingText
+const MorphingText = dynamic(
+  () =>
+    import("./magicui/morphing-text").then(
+      (mod) => mod.MorphingText
+    ),
+  {
+    ssr: false,
+  }
+);
+
+// Feature Data
+const features = [
+  {
+    icon: Sparkles,
+    color: "text-sky-400",
+    title: "AI-Powered Marketing",
+    desc: "Real-time audience insights and intelligent content generation built for scalable growth.",
+  },
+
+  {
+    icon: TrendingUp,
+    color: "text-green-400",
+    title: "Proven ROI",
+    desc: "Full-funnel optimization strategies backed by measurable attribution and performance data.",
+  },
+
+  {
+    icon: Layers,
+    color: "text-purple-400",
+    title: "Creative + Technical",
+    desc: "Powerful storytelling combined with deep technical execution and marketing engineering.",
+  },
+
+  {
+    icon: Cog,
+    color: "text-orange-400",
+    title: "Scalable Solutions",
+    desc: "Flexible systems designed to scale seamlessly from startups to enterprise organizations.",
+  },
+];
+
+// Animation Variants
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
 
-const containerVariants = {
-  hidden: {},
   visible: {
+    opacity: 1,
+    y: 0,
+
     transition: {
-      staggerChildren: 0.2, // stagger effect for cards
+      duration: 0.45,
+      ease: "easeOut",
     },
   },
 };
 
-const features = [
-  {
-    icon: <Sparkles className="w-10 h-10 text-sky-400" />,
-    title: "AI-Powered Marketing",
-    desc: "Real-time audience insights and content generation that scales with your ambitions.",
-  },
-  {
-    icon: <TrendingUp className="w-10 h-10 text-green-400" />,
-    title: "Proven ROI",
-    desc: "Full-funnel optimization with attribution you can trust.",
-  },
-  {
-    icon: <Layers className="w-10 h-10 text-purple-400" />,
-    title: "Creative + Technical",
-    desc: "Brand storytelling meets rigorous performance engineering.",
-  },
-  {
-    icon: <Cog className="w-10 h-10 text-orange-400" />,
-    title: "Scalable Solutions",
-    desc: "From startup to enterprise, we build systems that grow with you.",
-  },
-];
+const containerVariants = {
+  hidden: {},
 
-export default function WhyChoose() {
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+// Optimized Card
+const FeatureCard = memo(function FeatureCard({
+  icon: Icon,
+  color,
+  title,
+  desc,
+}) {
   return (
-    <section className="w-full bg-[#0B1D24] text-white px-6 md:px-16 py-24">
-      <div className="max-w-7xl mx-auto text-center mb-12">
-        {/* Heading Animation */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
-        >
-          <MorphingText texts={["why choose us"]} className="uppercase" />
-        </motion.div>
-
-        {/* Subtext Animation */}
-        <motion.p
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={fadeInUp}
-          className="mt-28 text-gray-200 max-w-2xl mx-auto text-xl"
-        >
-          We fuse generative AI with proven marketing playbooks to deliver predictable growth.
-        </motion.p>
+    <MotionDiv
+      variants={fadeInUp}
+      className="
+        group rounded-3xl
+        border border-white/10
+        bg-white/5
+        p-8
+        backdrop-blur-sm
+        transition-all duration-300
+        hover:-translate-y-2
+        hover:border-white/20
+        hover:bg-white/10
+      "
+    >
+      {/* ICON */}
+      <div
+        className="
+          mb-6 flex
+          h-16 w-16
+          items-center justify-center
+          rounded-2xl
+          bg-white/10
+          transition-all duration-300
+          group-hover:bg-white/15
+        "
+      >
+        <Icon
+          className={`
+            h-8 w-8
+            transition-transform duration-300
+            group-hover:scale-110
+            ${color}
+          `}
+        />
       </div>
 
-      {/* Feature Cards */}
-      <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+      {/* TITLE */}
+      <h3
+        className="
+          mb-4 text-2xl
+          font-bold text-white
+        "
       >
-        {features.map((item, index) => (
-          <motion.div
-            key={index}
+        {title}
+      </h3>
+
+      {/* DESCRIPTION */}
+      <p
+        className="
+          text-sm leading-relaxed
+          text-gray-300
+          md:text-base
+        "
+      >
+        {desc}
+      </p>
+    </MotionDiv>
+  );
+});
+
+function WhyChoose() {
+  return (
+    <section
+      className="
+        relative overflow-hidden
+        bg-[#0B1D24]
+        px-6 py-24
+        text-white
+        md:px-16
+      "
+    >
+      <div className="mx-auto max-w-7xl">
+        {/* HEADER */}
+        <div className="mx-auto mb-20 max-w-4xl text-center">
+          {/* TITLE */}
+          <MotionDiv
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
             variants={fadeInUp}
-            className="flex flex-col items-start gap-4 bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition"
           >
-            <div className="p-3 rounded-lg bg-white/10">{item.icon}</div>
-            <h3 className="text-xl font-bold">{item.title}</h3>
-            <p className="text-gray-200 text-sm">{item.desc}</p>
-          </motion.div>
-        ))}
-      </motion.div>
+            <div
+              className="
+                text-5xl font-extrabold
+                uppercase tracking-wide
+                md:text-7xl
+              "
+            >
+              <MorphingText
+                texts={["Why Choose Us"]}
+              />
+            </div>
+          </MotionDiv>
+
+          {/* SUBTEXT */}
+          <MotionP
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+            variants={fadeInUp}
+            className="
+              mx-auto mt-10
+              max-w-3xl
+              text-lg leading-relaxed
+              text-gray-300
+              md:text-2xl
+            "
+          >
+            We combine generative AI,
+            automation, and proven
+            digital marketing frameworks
+            to drive scalable business growth.
+          </MotionP>
+        </div>
+
+        {/* GRID */}
+        <MotionDiv
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: true,
+            amount: 0.1,
+          }}
+          className="
+            grid grid-cols-1
+            gap-8
+            md:grid-cols-2
+            xl:grid-cols-4
+          "
+        >
+          {features.map((feature) => (
+            <FeatureCard
+              key={feature.title}
+              {...feature}
+            />
+          ))}
+        </MotionDiv>
+      </div>
     </section>
   );
 }
+
+export default memo(WhyChoose);

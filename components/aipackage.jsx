@@ -1,170 +1,543 @@
+// /components/AiPackages.jsx
 "use client";
 
-import React from "react";
-import { CheckCircle, Rocket, Globe, BarChart3, BookOpen, Building, Handshake, Trophy } from "lucide-react";
-import { MorphingText } from "./magicui/morphing-text";
-import { motion } from "framer-motion";
+import React, { memo } from "react";
+import dynamic from "next/dynamic";
 
+import {
+  CheckCircle,
+  Rocket,
+  Globe,
+  BarChart3,
+  BookOpen,
+  Building,
+  Handshake,
+  Trophy,
+  ClipboardList,
+  Bot,
+  LineChart,
+  GraduationCap,
+  Workflow,
+  Shield,
+  Brain,
+} from "lucide-react";
+
+// Lazy load framer-motion
+const MotionDiv = dynamic(
+  async () => {
+    const mod = await import("framer-motion");
+    return mod.motion.div;
+  },
+  {
+    ssr: false,
+  }
+);
+
+const MotionP = dynamic(
+  async () => {
+    const mod = await import("framer-motion");
+    return mod.motion.p;
+  },
+  {
+    ssr: false,
+  }
+);
+
+// Lazy load MorphingText
+const MorphingText = dynamic(
+  () =>
+    import("./magicui/morphing-text").then(
+      (mod) => mod.MorphingText
+    ),
+  {
+    ssr: false,
+  }
+);
+
+// Packages Data
 const packages = [
   {
-    icon: <Rocket className="w-10 h-10 text-sky-400" />,
-    title: "🚀 Starter Package – Perfect for Small Businesses",
-    subtitle: "Designed for startups and growing companies that want quick wins with AI.",
+    icon: Rocket,
+    color: "text-sky-400",
+    gradient:
+      "bg-gradient-to-r from-sky-800 via-indigo-700 to-purple-700",
+
+    title:
+      "🚀 Starter Package – Perfect for Small Businesses",
+
+    subtitle:
+      "Designed for startups and growing companies that want quick wins with AI.",
+
     features: [
       "AI Readiness Assessment (light version)",
-      "Workflow Automation (invoicing, scheduling, reporting)",
-      "Generative AI content creation (blogs, ads, social media)",
-      "AI-powered customer engagement (chatbots & email campaigns)",
+      "Workflow Automation",
+      "Generative AI content creation",
+      "AI-powered customer engagement",
       "Basic analytics dashboard",
     ],
-    outcome: "💡 Business Case: Affordable automation that saves time, reduces costs, and builds digital momentum.",
+
+    outcome:
+      "Affordable automation that saves time, reduces costs, and builds digital momentum.",
   },
+
   {
-    icon: <Globe className="w-10 h-10 text-indigo-400" />,
-    title: "🌐 Enterprise Package – For Large Organizations",
-    subtitle: "Built for enterprises needing robust, secure, and scalable AI solutions.",
+    icon: Globe,
+    color: "text-indigo-400",
+    gradient:
+      "bg-gradient-to-r from-indigo-800 via-sky-700 to-purple-700",
+
+    title:
+      "🌐 Enterprise Package – For Large Organizations",
+
+    subtitle:
+      "Built for enterprises needing robust, secure, and scalable AI solutions.",
+
     features: [
-      "Enterprise AI Readiness Assessment & Strategy",
-      "Intelligent Process Automation (AI + RPA at scale)",
-      "Agentic AI for decision-making & orchestration",
-      "Supply chain, finance & HR AI optimization",
-      "AI Governance, Compliance & Ethical AI frameworks",
-      "Ongoing AMS (Application Managed Services) & 24/7 support",
+      "Enterprise AI Readiness Assessment",
+      "Intelligent Process Automation",
+      "Agentic AI orchestration",
+      "Supply chain & HR AI optimization",
+      "AI Governance & Compliance",
+      "24/7 managed support",
     ],
-    outcome: "💡 Enterprise Value: Future-ready scalability, risk-managed AI adoption, and enterprise-wide impact.",
+
+    outcome:
+      "Future-ready scalability with enterprise-wide AI impact.",
   },
+
   {
-    icon: <BarChart3 className="w-10 h-10 text-green-400" />,
-    title: "📈 Growth Package – For Scaling Businesses",
-    subtitle: "Ideal for mid-sized companies ready to expand AI adoption.",
+    icon: BarChart3,
+    color: "text-green-400",
+    gradient:
+      "bg-gradient-to-r from-green-700 via-teal-700 to-cyan-700",
+
+    title:
+      "📈 Growth Package – For Scaling Businesses",
+
+    subtitle:
+      "Ideal for mid-sized companies ready to expand AI adoption.",
+
     features: [
-      "Comprehensive AI Readiness Assessment & Roadmap",
-      "Marketing automation (multi-channel personalization)",
-      "Predictive analytics & forecasting (sales, finance, operations)",
-      "AI-driven data visualization dashboards",
-      "Process automation across multiple departments",
+      "AI Readiness Assessment",
+      "Marketing automation",
+      "Predictive analytics",
+      "AI-driven dashboards",
+      "Department-wide automation",
     ],
-    outcome: "💡 Outcome: Data-driven decisions, better customer engagement, and scalable efficiency.",
+
+    outcome:
+      "Data-driven decisions and scalable operational efficiency.",
   },
 ];
 
+// Why Choose Data
 const whyChoose = [
   {
-    icon: <Trophy className="w-10 h-10 text-yellow-400" />,
-    title: "🌍 25+ Years of SAP Experience",
-    desc: "Senior consultants with 25+ years of IT expertise, delivering global projects across industries.",
+    icon: Trophy,
+    color: "text-yellow-400",
+
+    title:
+      "🌍 25+ Years of SAP Experience",
+
+    desc:
+      "Senior consultants delivering global transformation projects across industries.",
   },
+
   {
-    icon: <BookOpen className="w-10 h-10 text-pink-400" />,
-    title: "📚 Industry Thought Leadership",
-    desc: "Includes a published author on Digital Transformation, AI Automation & SAP S/4HANA.",
+    icon: BookOpen,
+    color: "text-pink-400",
+
+    title:
+      "📚 Industry Thought Leadership",
+
+    desc:
+      "Published expertise in Digital Transformation, AI Automation & SAP S/4HANA.",
   },
+
   {
-    icon: <Handshake className="w-10 h-10 text-green-400" />,
-    title: "🤝 Global Consulting Experience",
-    desc: "SAP consulting for 50+ global clients across North America, Europe, and Asia.",
+    icon: Handshake,
+    color: "text-green-400",
+
+    title:
+      "🤝 Global Consulting Experience",
+
+    desc:
+      "Experience delivering solutions across North America, Europe, and Asia.",
   },
+
   {
-    icon: <Building className="w-10 h-10 text-indigo-400" />,
-    title: "🏢 Big 4 Consulting Pedigree",
-    desc: "Backgrounds at IBM, Accenture, and Capgemini with world-class methodologies.",
+    icon: Building,
+    color: "text-indigo-400",
+
+    title:
+      "🏢 Big 4 Consulting Pedigree",
+
+    desc:
+      "Experience from IBM, Accenture, and Capgemini methodologies.",
   },
+
   {
-    icon: <Rocket className="w-10 h-10 text-sky-400" />,
-    title: "🚀 End-to-End Transformation Partner",
-    desc: "From Advisory to Managed Services, ensuring projects meet goals on time and budget.",
+    icon: Rocket,
+    color: "text-sky-400",
+
+    title:
+      "🚀 End-to-End Transformation Partner",
+
+    desc:
+      "From advisory to managed services with measurable delivery outcomes.",
   },
 ];
 
+// Animation Variants
 const fadeUp = {
-  hidden: { opacity: 0, y: 50 },
-  visible: (i = 1) => ({
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+
+  visible: {
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.2, duration: 0.6, ease: "easeOut" },
-  }),
+
+    transition: {
+      duration: 0.45,
+      ease: "easeOut",
+    },
+  },
 };
 
-export default function AiPackages() {
+const containerVariants = {
+  hidden: {},
+
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+// Optimized Package Card
+const PackageCard = memo(function PackageCard({
+  icon: Icon,
+  color,
+  gradient,
+  title,
+  subtitle,
+  features,
+  outcome,
+}) {
   return (
-    <section className="bg-[#0B1D24] px-6 md:px-16 py-20 relative overflow-hidden">
-      {/* AI Packages Section */}
-      <div className="text-center mb-16">
-        <MorphingText
-          texts={["AI Packages", "for Every Business"]}
-          className="uppercase text-4xl md:text-5xl font-extrabold text-white tracking-tight"
-        />
-        <p className="text-gray-300 mt-4 text-lg max-w-2xl mx-auto">
-          Flexible AI service tiers designed for businesses of every size — from startups to enterprises.
+    <MotionDiv
+      variants={fadeUp}
+      className="
+        group relative
+        overflow-hidden
+        rounded-2xl
+        border border-white/10
+        bg-white/10
+        p-8
+        shadow-md
+        backdrop-blur-xl
+        transition-all duration-300
+        hover:shadow-xl
+        hover:scale-[1.02]
+      "
+    >
+      {/* Glow */}
+      <div
+        className={`
+          absolute inset-0
+          rounded-2xl
+          opacity-20 blur-md
+          transition duration-500
+          group-hover:opacity-40
+          ${gradient}
+        `}
+      />
+
+      {/* Content */}
+      <div className="relative z-10">
+        {/* Icon */}
+        <div
+          className="
+            mb-6 flex
+            h-14 w-14
+            items-center justify-center
+            rounded-xl
+            border border-white/20
+            bg-white/10
+          "
+        >
+          <Icon
+            className={`
+              h-10 w-10
+              ${color}
+            `}
+          />
+        </div>
+
+        {/* Title */}
+        <h3
+          className="
+            mb-2 text-xl
+            font-bold text-white
+          "
+        >
+          {title}
+        </h3>
+
+        {/* Subtitle */}
+        <p
+          className="
+            mb-4 text-sm
+            text-gray-300
+          "
+        >
+          {subtitle}
+        </p>
+
+        {/* Features */}
+        <ul className="space-y-2">
+          {features.map((feature) => (
+            <li
+              key={feature}
+              className="
+                flex items-start
+                gap-2 text-sm
+                text-gray-300
+              "
+            >
+              <CheckCircle
+                className="
+                  mt-[2px]
+                  h-4 w-4
+                  shrink-0
+                  text-green-400
+                "
+              />
+
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
+
+        {/* Outcome */}
+        <p
+          className="
+            mt-6 text-sm
+            italic text-gray-200
+          "
+        >
+          💡 {outcome}
+        </p>
+      </div>
+    </MotionDiv>
+  );
+});
+
+// Optimized Why Choose Card
+const WhyChooseCard = memo(function WhyChooseCard({
+  icon: Icon,
+  color,
+  title,
+  desc,
+}) {
+  return (
+    <MotionDiv
+      variants={fadeUp}
+      className="
+        group relative
+        overflow-hidden
+        rounded-2xl
+        border border-white/10
+        bg-white/10
+        p-6
+        shadow-md
+        backdrop-blur-xl
+        transition-all duration-300
+        hover:shadow-lg
+        hover:scale-[1.02]
+      "
+    >
+      {/* Glow */}
+      <div
+        className="
+          absolute inset-0
+          rounded-2xl
+          bg-gradient-to-r
+          from-indigo-800
+          to-sky-700
+          opacity-20 blur-md
+          transition duration-300
+          group-hover:opacity-40
+        "
+      />
+
+      {/* Content */}
+      <div className="relative z-10">
+        {/* Icon */}
+        <div
+          className="
+            mb-4 flex
+            h-14 w-14
+            items-center justify-center
+            rounded-xl
+            border border-white/20
+            bg-white/10
+          "
+        >
+          <Icon
+            className={`
+              h-10 w-10
+              ${color}
+            `}
+          />
+        </div>
+
+        {/* Title */}
+        <h3
+          className="
+            text-lg font-semibold
+            text-white
+          "
+        >
+          {title}
+        </h3>
+
+        {/* Desc */}
+        <p
+          className="
+            mt-2 text-sm
+            text-gray-300
+          "
+        >
+          {desc}
+        </p>
+      </div>
+    </MotionDiv>
+  );
+});
+
+function AiPackages() {
+  return (
+    <section
+      className="
+        relative overflow-hidden
+        bg-[#0B1D24]
+        px-6 py-20
+        md:px-16
+      "
+    >
+      {/* HEADER */}
+      <div className="mb-16 text-center">
+        <div
+          className="
+            text-4xl font-extrabold
+            tracking-tight text-white
+            md:text-5xl
+          "
+        >
+          <MorphingText
+            texts={[
+              "AI Packages",
+              "for Every Business",
+            ]}
+            className="uppercase"
+          />
+        </div>
+
+        <p
+          className="
+            mx-auto mt-4
+            max-w-2xl
+            text-lg text-gray-300
+          "
+        >
+          Flexible AI service tiers designed
+          for businesses of every size.
         </p>
       </div>
 
-      {/* Package Boxes */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {packages.map((pkg, index) => (
-          <motion.div
-            key={index}
-            className="group relative bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-500 ease-[cubic-bezier(.4,0,.2,1)]"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            custom={index}
-            variants={fadeUp}
-          >
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-sky-800 via-indigo-700 to-purple-700 opacity-20 group-hover:opacity-50 blur-md transition duration-700 ease-in-out"></div>
-            <div className="relative z-10">
-              <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-white/10 border border-white/20 mb-6">
-                {pkg.icon}
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">{pkg.title}</h3>
-              <p className="text-gray-300 text-sm mb-4">{pkg.subtitle}</p>
-              <ul className="space-y-2 text-gray-300 text-sm">
-                {pkg.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-400 mt-[2px]" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-gray-200 mt-6 text-sm italic">{pkg.outcome}</p>
-            </div>
-          </motion.div>
+      {/* PACKAGES GRID */}
+      <MotionDiv
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{
+          once: true,
+          amount: 0.1,
+        }}
+        className="
+          mx-auto grid
+          max-w-7xl
+          grid-cols-1
+          gap-8
+          md:grid-cols-2
+          lg:grid-cols-3
+        "
+      >
+        {packages.map((pkg) => (
+          <PackageCard
+            key={pkg.title}
+            {...pkg}
+          />
         ))}
-      </div>
+      </MotionDiv>
 
-      {/* Why Choose Section */}
-      <div className="text-center mt-28 mb-16">
-        <h2 className="uppercase text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-          Why Choose Cosmic Information System, LLC?
+      {/* WHY CHOOSE */}
+      <div className="mb-16 mt-28 text-center">
+        <h2
+          className="
+            text-4xl font-extrabold
+            uppercase tracking-tight
+            text-white
+            md:text-5xl
+          "
+        >
+          Why Choose Us ?
         </h2>
-        <p className="text-gray-300 mt-4 text-lg max-w-3xl mx-auto">
-          We combine cutting-edge AI technologies (Generative AI, Agentic AI, Automation) with a client-first
-          approach — ensuring solutions are affordable for small businesses and scalable for enterprises.
+
+        <p
+          className="
+            mx-auto mt-4
+            max-w-3xl
+            text-lg text-gray-300
+          "
+        >
+          We combine cutting-edge AI
+          technologies with enterprise-grade
+          consulting experience and
+          client-first delivery.
         </p>
       </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {whyChoose.map((item, index) => (
-          <motion.div
-            key={index}
-            className="group relative bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-500"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            custom={index}
-            variants={fadeUp}
-          >
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-800 to-sky-700 opacity-20 blur-md group-hover:opacity-40 transition"></div>
-            <div className="relative z-10">
-              <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-white/10 border border-white/20 mb-4">
-                {item.icon}
-              </div>
-              <h3 className="text-lg font-semibold text-white">{item.title}</h3>
-              <p className="text-gray-300 text-sm mt-2">{item.desc}</p>
-            </div>
-          </motion.div>
+      {/* WHY CHOOSE GRID */}
+      <MotionDiv
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{
+          once: true,
+          amount: 0.1,
+        }}
+        className="
+          mx-auto grid
+          max-w-6xl
+          grid-cols-1
+          gap-8
+          md:grid-cols-2
+          lg:grid-cols-3
+        "
+      >
+        {whyChoose.map((item) => (
+          <WhyChooseCard
+            key={item.title}
+            {...item}
+          />
         ))}
-      </div>
+      </MotionDiv>
     </section>
   );
 }
+
+export default memo(AiPackages);

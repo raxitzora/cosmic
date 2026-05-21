@@ -1,7 +1,9 @@
 // /components/AiService.jsx
 "use client";
 
-import React from "react";
+import React, { memo } from "react";
+import dynamic from "next/dynamic";
+
 import {
   ClipboardList,
   Bot,
@@ -13,196 +15,420 @@ import {
   BarChart3,
   Brain,
 } from "lucide-react";
-import { MorphingText } from "./magicui/morphing-text";
-import { motion } from "framer-motion";
 
+// Lazy load heavy animation component
+const MotionDiv = dynamic(
+  async () => {
+    const mod = await import("framer-motion");
+    return mod.motion.div;
+  },
+  {
+    ssr: false,
+  }
+);
+
+const MotionP = dynamic(
+  async () => {
+    const mod = await import("framer-motion");
+    return mod.motion.p;
+  },
+  {
+    ssr: false,
+  }
+);
+
+// Lazy load MorphingText
+const MorphingText = dynamic(
+  () =>
+    import("./magicui/morphing-text").then(
+      (mod) => mod.MorphingText
+    ),
+  {
+    ssr: false,
+  }
+);
+
+// Small Business Services
 const smallBizServices = [
   {
-    icon: <ClipboardList className="w-10 h-10 text-sky-400" />,
+    icon: ClipboardList,
+    color: "text-sky-400",
     title: "AI Readiness Assessments",
     desc: "Identify opportunities, data readiness, and a prioritized roadmap.",
   },
+
   {
-    icon: <Bot className="w-10 h-10 text-indigo-400" />,
+    icon: Bot,
+    color: "text-indigo-400",
     title: "Large Language Model Solutions",
     desc: "Secure, domain-tuned assistants and automations for your teams.",
   },
+
   {
-    icon: <LineChart className="w-10 h-10 text-green-400" />,
+    icon: LineChart,
+    color: "text-green-400",
     title: "Data Science Consulting",
     desc: "Forecasting, optimization, and analytics to drive decisions.",
   },
+
   {
-    icon: <GraduationCap className="w-10 h-10 text-pink-400" />,
+    icon: GraduationCap,
+    color: "text-pink-400",
     title: "Customized Training Programs",
     desc: "Executive and practitioner enablement to adopt AI confidently.",
   },
+
   {
-    icon: <Workflow className="w-10 h-10 text-purple-400" />,
+    icon: Workflow,
+    color: "text-purple-400",
     title: "Process Automation",
     desc: "Streamline workflows with orchestration and RPA + AI.",
   },
+
   {
-    icon: <Shield className="w-10 h-10 text-yellow-400" />,
+    icon: Shield,
+    color: "text-yellow-400",
     title: "AI Governance",
     desc: "Policies, risk controls, and compliance aligned to your context.",
   },
 ];
 
+// Enterprise Services
 const enterpriseServices = [
   {
-    icon: <Building className="w-10 h-10 text-blue-400" />,
+    icon: Building,
+    color: "text-blue-400",
     title: "Enterprise AI Readiness Assessment & Roadmap",
     desc: "Comprehensive evaluation of AI maturity with a roadmap for enterprise-wide adoption.",
   },
+
   {
-    icon: <Workflow className="w-10 h-10 text-purple-400" />,
-    title: "Intelligent Process Automation (AI + RPA at scale)",
+    icon: Workflow,
+    color: "text-purple-400",
+    title: "Intelligent Process Automation",
     desc: "Deploy automation solutions that scale across departments and business units.",
   },
+
   {
-    icon: <Brain className="w-10 h-10 text-pink-400" />,
-    title: "Agentic AI for Decision Support & Task Orchestration",
-    desc: "Empower leaders with AI agents that orchestrate tasks and provide actionable insights.",
+    icon: Brain,
+    color: "text-pink-400",
+    title: "Agentic AI for Decision Support",
+    desc: "Empower leaders with AI agents that orchestrate tasks and provide insights.",
   },
+
   {
-    icon: <BarChart3 className="w-10 h-10 text-green-400" />,
+    icon: BarChart3,
+    color: "text-green-400",
     title: "Predictive Analytics & Forecasting",
-    desc: "Finance, supply chain, HR — advanced analytics to stay ahead of trends.",
+    desc: "Advanced analytics for finance, supply chain, HR, and operations.",
   },
+
   {
-    icon: <Shield className="w-10 h-10 text-yellow-400" />,
-    title: "AI Governance, Compliance & Ethical AI Frameworks",
-    desc: "Ensure responsible, ethical, and compliant AI deployments at enterprise scale.",
+    icon: Shield,
+    color: "text-yellow-400",
+    title: "AI Governance & Compliance",
+    desc: "Responsible and compliant enterprise AI deployment frameworks.",
   },
 ];
 
 // Animation Variants
 const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i = 0) => ({
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+
+  visible: {
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.15, duration: 0.6, ease: "easeOut" },
-  }),
+
+    transition: {
+      duration: 0.45,
+      ease: "easeOut",
+    },
+  },
 };
 
-export default function AiService() {
+const containerVariants = {
+  hidden: {},
+
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+// Optimized Card Component
+const ServiceCard = memo(function ServiceCard({
+  icon: Icon,
+  color,
+  title,
+  desc,
+  gradient,
+}) {
   return (
-    <section className="bg-[#0B1D24] px-6 md:px-16 py-20 relative overflow-hidden">
-      {/* Small Business Services */}
-      <motion.div
-        className="text-center mb-16"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-      >
-        <MorphingText
-          texts={["Services for", "Small Businesses"]}
-          className="uppercase text-4xl md:text-5xl font-extrabold text-white tracking-tight"
-        />
-        <motion.p
-          custom={1}
-          variants={fadeUp}
-          className="text-gray-200 mt-4 text-lg max-w-2xl mx-auto font-bold"
-        >
-          Unlock the full potential of AI & automation for small businesses.
-        </motion.p>
-      </motion.div>
+    <MotionDiv
+      variants={fadeUp}
+      className="
+        group relative
+        overflow-hidden
+        rounded-2xl
+        border border-white/10
+        bg-white/10
+        p-8
+        shadow-md
+        backdrop-blur-xl
+        transition-all duration-300
+        hover:shadow-xl
+        hover:scale-[1.02]
+      "
+    >
+      {/* Background Glow */}
+      <div
+        className={`
+          absolute inset-0
+          rounded-2xl
+          opacity-30 blur-md
+          transition duration-500
+          ${gradient}
+        `}
+      />
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {smallBizServices.map((service, i) => (
-          <motion.div
-            key={i}
-            custom={i}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={fadeUp}
-            className="group relative bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-500 ease-[cubic-bezier(.4,0,.2,1)]"
-          >
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-sky-800 opacity-30 blur-md transition duration-700 ease-in-out"></div>
-            <div className="relative z-10">
-              <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-white/10 border border-white/20 mb-6">
-                {service.icon}
-              </div>
-              <h3 className="text-xl font-bold text-white">{service.title}</h3>
-              <p className="text-gray-300 text-sm mt-3 leading-relaxed">
-                {service.desc}
-              </p>
-            </div>
-          </motion.div>
-        ))}
+      {/* Content */}
+      <div className="relative z-10">
+        {/* Icon */}
+        <div
+          className="
+            mb-6 flex
+            h-14 w-14
+            items-center justify-center
+            rounded-xl
+            border border-white/20
+            bg-white/10
+          "
+        >
+          <Icon
+            className={`
+              h-10 w-10
+              ${color}
+            `}
+          />
+        </div>
+
+        {/* Title */}
+        <h3
+          className="
+            text-xl font-bold
+            text-white
+          "
+        >
+          {title}
+        </h3>
+
+        {/* Description */}
+        <p
+          className="
+            mt-3 text-sm
+            leading-relaxed
+            text-gray-300
+          "
+        >
+          {desc}
+        </p>
+      </div>
+    </MotionDiv>
+  );
+});
+
+function AiService() {
+  return (
+    <section
+      className="
+        relative overflow-hidden
+        bg-[#0B1D24]
+        px-6 py-20
+        md:px-16
+      "
+    >
+      {/* SMALL BUSINESS SECTION */}
+      <div className="mb-20 text-center">
+        <div
+          className="
+            text-4xl font-extrabold
+            tracking-tight text-white
+            md:text-5xl
+          "
+        >
+          <MorphingText
+            texts={[
+              "Services for",
+              "Small Businesses",
+            ]}
+            className="uppercase"
+          />
+        </div>
+
+        <MotionP
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          variants={fadeUp}
+          className="
+            mx-auto mt-4
+            max-w-2xl
+            text-lg font-bold
+            text-gray-200
+          "
+        >
+          Unlock the full potential of AI
+          & automation for small businesses.
+        </MotionP>
       </div>
 
-      <motion.p
-        className="text-gray-200 mt-10 text-center max-w-5xl mx-auto"
+      {/* SMALL BUSINESS GRID */}
+      <MotionDiv
+        variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={fadeUp}
+        viewport={{
+          once: true,
+          amount: 0.1,
+        }}
+        className="
+          mx-auto grid
+          max-w-7xl
+          grid-cols-1
+          gap-8
+          md:grid-cols-2
+          lg:grid-cols-3
+        "
       >
-        We guide clients in leveraging Generative AI, Agentic AI, and intelligent
-        automation to streamline operations, improve decision-making, enhance customer
-        experiences, and unlock new opportunities for growth.
-      </motion.p>
-
-      {/* Enterprise Services Section */}
-      <motion.div
-        className="text-center mt-24 mb-16"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-      >
-        <MorphingText
-          texts={["services for", "enterprises"]}
-          className="uppercase text-4xl md:text-5xl font-extrabold text-white tracking-tight"
-        />
-        <motion.p
-          custom={1}
-          variants={fadeUp}
-          className="text-gray-200 mt-4 text-lg max-w-3xl mx-auto font-bold"
-        >
-          Enterprise-grade AI & automation frameworks designed for scale and compliance.
-        </motion.p>
-      </motion.div>
-
-      <div className="max-w-8xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-        {enterpriseServices.map((service, i) => (
-          <motion.div
-            key={i}
-            custom={i}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={fadeUp}
-            className="group relative bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-500 ease-[cubic-bezier(.4,0,.2,1)]"
-          >
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-800 opacity-30 blur-md transition duration-700 ease-in-out"></div>
-            <div className="relative z-10">
-              <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-white/10 border border-white/20 mb-6">
-                {service.icon}
-              </div>
-              <h3 className="text-xl font-bold text-white">{service.title}</h3>
-              <p className="text-gray-300 text-sm mt-3 leading-relaxed">
-                {service.desc}
-              </p>
-            </div>
-          </motion.div>
+        {smallBizServices.map((service) => (
+          <ServiceCard
+            key={service.title}
+            {...service}
+            gradient="bg-gradient-to-r from-sky-800"
+          />
         ))}
+      </MotionDiv>
+
+      {/* DESCRIPTION */}
+      <MotionP
+        initial="hidden"
+        whileInView="visible"
+        viewport={{
+          once: true,
+          amount: 0.2,
+        }}
+        variants={fadeUp}
+        className="
+          mx-auto mt-10
+          max-w-5xl
+          text-center
+          text-gray-200
+        "
+      >
+        We guide clients in leveraging
+        Generative AI, Agentic AI, and
+        intelligent automation to improve
+        operations, decision-making, and
+        customer experiences.
+      </MotionP>
+
+      {/* ENTERPRISE SECTION */}
+      <div className="mb-16 mt-28 text-center">
+        <div
+          className="
+            text-4xl font-extrabold
+            tracking-tight text-white
+            md:text-5xl
+          "
+        >
+          <MorphingText
+            texts={[
+              "Services for",
+              "Enterprises",
+            ]}
+            className="uppercase"
+          />
+        </div>
+
+        <MotionP
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          variants={fadeUp}
+          className="
+            mx-auto mt-4
+            max-w-3xl
+            text-lg font-bold
+            text-gray-200
+          "
+        >
+          Enterprise-grade AI & automation
+          frameworks designed for scale,
+          governance, and compliance.
+        </MotionP>
       </div>
 
-      <motion.p
-        className="text-gray-200 mt-8 text-lg max-w-8xl mx-auto text-center"
+      {/* ENTERPRISE GRID */}
+      <MotionDiv
+        variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={fadeUp}
+        viewport={{
+          once: true,
+          amount: 0.1,
+        }}
+        className="
+          mx-auto grid
+          max-w-7xl
+          grid-cols-1
+          gap-8
+          md:grid-cols-2
+          lg:grid-cols-5
+        "
       >
-        Our approach blends strategic advisory, implementation, and ongoing optimization
-        to ensure clients remain competitive in an AI-driven future. With a focus on
-        measurable outcomes, we transform AI adoption into sustainable business value.
-      </motion.p>
+        {enterpriseServices.map((service) => (
+          <ServiceCard
+            key={service.title}
+            {...service}
+            gradient="bg-gradient-to-r from-indigo-800"
+          />
+        ))}
+      </MotionDiv>
+
+      {/* BOTTOM DESCRIPTION */}
+      <MotionP
+        initial="hidden"
+        whileInView="visible"
+        viewport={{
+          once: true,
+          amount: 0.2,
+        }}
+        variants={fadeUp}
+        className="
+          mx-auto mt-10
+          max-w-6xl
+          text-center
+          text-lg text-gray-200
+        "
+      >
+        Our approach blends strategic
+        advisory, implementation, and
+        optimization to ensure AI adoption
+        creates measurable and sustainable
+        business value.
+      </MotionP>
     </section>
   );
 }
+
+export default memo(AiService);

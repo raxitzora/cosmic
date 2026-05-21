@@ -1,101 +1,310 @@
-// /components/Auto.jsx
 "use client";
 
-import { OrbitingCircles } from "@/components/magicui/orbiting-circles";
-import React from "react";
-import { Flame, Calendar } from "lucide-react";
-import { motion } from "framer-motion";
+import React, { memo } from "react";
+import dynamic from "next/dynamic";
 
-// React Icons (AI Logos)
-import { 
-  SiOpenai, 
-  SiGooglegemini, 
-  SiPerplexity, 
-  SiGnubash, 
-  SiProbot, 
-  SiPython 
-} from "react-icons/si";
 import Link from "next/link";
+
+import {
+  Flame,
+} from "lucide-react";
+
+import {
+  SiOpenai,
+  SiGooglegemini,
+  SiPerplexity,
+  SiGnubash,
+  SiProbot,
+  SiPython,
+} from "react-icons/si";
+
+// Lazy Load Framer Motion
+const MotionDiv = dynamic(
+  async () => {
+    const mod = await import("framer-motion");
+    return mod.motion.div;
+  },
+  {
+    ssr: false,
+  }
+);
+
+// Lazy Load Heavy Orbiting Component
+const OrbitingCircles = dynamic(
+  () =>
+    import("@/components/magicui/orbiting-circles").then(
+      (mod) => mod.OrbitingCircles
+    ),
+  {
+    ssr: false,
+
+    loading: () => (
+      <div
+        className="
+          h-[420px] w-[420px]
+          animate-pulse rounded-full
+          bg-[#17313B]
+        "
+      />
+    ),
+  }
+);
 
 // Animation Variants
 const fadeInUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-};
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
 
-const container = {
-  hidden: {},
   visible: {
-    transition: { staggerChildren: 0.2 },
+    opacity: 1,
+    y: 0,
+
+    transition: {
+      duration: 0.45,
+      ease: "easeOut",
+    },
   },
 };
 
-export default function Auto() {
+const containerVariants = {
+  hidden: {},
+
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+// Icon Config
+const innerIcons = [
+  {
+    icon: SiOpenai,
+    className: "text-white",
+  },
+
+  {
+    icon: SiGooglegemini,
+    className: "text-[#6C4DF5]",
+  },
+
+  {
+    icon: SiPerplexity,
+    className: "text-gray-400",
+  },
+];
+
+const outerIcons = [
+  {
+    icon: SiGnubash,
+    className: "text-gray-200",
+  },
+
+  {
+    icon: SiProbot,
+    className: "text-green-400",
+  },
+
+  {
+    icon: SiPython,
+    className: "text-yellow-400",
+  },
+];
+
+// Reusable Orbit Icon
+const OrbitIcon = memo(function OrbitIcon({
+  icon: Icon,
+  className,
+  size = "large",
+}) {
   return (
-    <section className="bg-gradient-to-b from-[#0B1D24] via-[#17313B] to-[#0B1D24] px-6 md:px-16 py-32 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-        
-        {/* Left Side */}
-        <motion.div
-          className="space-y-8"
+    <Icon
+      className={`
+        transition-transform duration-300
+        hover:scale-110
+        ${
+          size === "large"
+            ? "h-16 w-16 md:h-20 md:w-20"
+            : "h-12 w-12 md:h-14 md:w-14"
+        }
+        ${className}
+      `}
+    />
+  );
+});
+
+function Auto() {
+  return (
+    <section
+      className="
+        relative overflow-hidden
+        bg-gradient-to-b
+        from-[#0B1D24]
+        via-[#17313B]
+        to-[#0B1D24]
+        px-6 py-28
+        md:px-16
+      "
+    >
+      <div
+        className="
+          mx-auto grid
+          max-w-7xl
+          grid-cols-1
+          items-center gap-20
+          md:grid-cols-2
+        "
+      >
+        {/* LEFT CONTENT */}
+        <MotionDiv
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={container}
+          viewport={{
+            once: true,
+            amount: 0.15,
+          }}
+          variants={containerVariants}
+          className="space-y-8"
         >
-          <motion.h2
-            variants={fadeInUp}
-            className="text-3xl md:text-5xl font-bold text-white leading-snug"
-          >
-            We Help Businesses <br />
-            Unlock the Full Potential <br />
-            of <span className="text-sky-400">AI & Automation.</span>
-          </motion.h2>
+          {/* TITLE */}
+          <MotionDiv variants={fadeInUp}>
+            <h2
+              className="
+                text-4xl font-extrabold
+                leading-tight
+                text-white
+                md:text-6xl
 
-          <motion.p
-            variants={fadeInUp}
-            className="text-gray-300 text-lg max-w-lg"
-          >
-            from startups to global enterprises—can adopt AI confidently and strategically with Cosmic Information.
-          </motion.p>
+              "
+            >
+              We Help Businesses
+              Unlock the Full
+              Potential of{" "}
+              <span className="text-sky-400">
+                AI & Automation
+              </span>
+            </h2>
+          </MotionDiv>
 
-          <motion.div
-            variants={fadeInUp}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-            <Link href="/contact">
-            <button className="flex items-center gap-2 bg-sky-500 text-white font-medium px-6 py-3 rounded-xl hover:bg-sky-400 transition shadow-lg">
-              <Flame className="w-5 h-5" />
-              Schedule Free AI Readiness Call
-            </button>
+          {/* DESCRIPTION */}
+          <MotionDiv variants={fadeInUp}>
+            <p
+              className="
+                max-w-xl
+                text-lg leading-relaxed
+                text-gray-300
+              "
+            >
+              From startups to enterprise
+              organizations, we help teams
+              adopt AI strategically with
+              scalable automation systems
+              and intelligent workflows.
+            </p>
+          </MotionDiv>
+
+          {/* CTA */}
+          <MotionDiv variants={fadeInUp}>
+            <Link
+              href="/contact"
+              prefetch={true}
+              className="
+                inline-flex items-center
+                gap-3 rounded-2xl
+                bg-sky-500
+                px-7 py-4
+                font-semibold text-white
+                shadow-xl
+                transition-all duration-300
+                hover:scale-105
+                hover:bg-sky-400
+                hover:shadow-sky-500/30
+              "
+            >
+              <Flame className="h-5 w-5" />
+
+              <span>
+                Schedule Free AI
+                Readiness Call
+              </span>
             </Link>
-           
-          </motion.div>
-        </motion.div>
+          </MotionDiv>
+        </MotionDiv>
 
-        {/* Right Side - Orbiting AI Icons */}
-        <motion.div
-          className="relative h-[500px] w-full flex items-center justify-center"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: true, amount: 0.3 }}
+        {/* RIGHT CONTENT */}
+        <MotionDiv
+          initial={{
+            opacity: 0,
+            scale: 0.92,
+          }}
+          whileInView={{
+            opacity: 1,
+            scale: 1,
+          }}
+          transition={{
+            duration: 0.6,
+            ease: "easeOut",
+          }}
+          viewport={{
+            once: true,
+            amount: 0.15,
+          }}
+          className="
+            relative flex
+            min-h-[450px]
+            items-center justify-center
+          "
         >
-          {/* Inner Orbit */}
-          <OrbitingCircles>
-            <SiOpenai className="w-28 h-28 text-white" />
-            <SiGooglegemini className="w-28 h-28 text-[#6C4DF5]" />
-            <SiPerplexity className="w-28 h-28 text-gray-400" />
-          </OrbitingCircles>
+          <div
+            className="
+              relative flex
+              h-[420px] w-[420px]
+              items-center justify-center
+            "
+          >
+            {/* CENTER GLOW */}
+            <div
+              className="
+                absolute h-32 w-32
+                rounded-full
+                bg-sky-500/10
+                blur-3xl
+              "
+            />
 
-          {/* Outer Orbit */}
-          <OrbitingCircles radius={190} reverse>
-            <SiGnubash className="w-20 h-20 text-gray-200" />
-            <SiProbot className="w-20 h-20 text-green-400" />
-            <SiPython className="w-20 h-20 text-yellow-400" />
-          </OrbitingCircles>
-        </motion.div>
+            {/* INNER ORBIT */}
+            <OrbitingCircles>
+              {innerIcons.map((item, index) => (
+                <OrbitIcon
+                  key={index}
+                  icon={item.icon}
+                  className={item.className}
+                  size="large"
+                />
+              ))}
+            </OrbitingCircles>
+
+            {/* OUTER ORBIT */}
+            <OrbitingCircles
+              radius={170}
+              reverse
+            >
+              {outerIcons.map((item, index) => (
+                <OrbitIcon
+                  key={index}
+                  icon={item.icon}
+                  className={item.className}
+                  size="small"
+                />
+              ))}
+            </OrbitingCircles>
+          </div>
+        </MotionDiv>
       </div>
     </section>
   );
 }
+
+export default memo(Auto);
